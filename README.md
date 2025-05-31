@@ -41,8 +41,7 @@ Then open your browser and go to http://localhost:3000.
 
 
 🐳 Run with Docker
-bash
-Copy code
+
 docker build -t node-app .
 docker run -p 3000:3000 node-app
 
@@ -50,7 +49,7 @@ docker run -p 3000:3000 node-app
 
 📂 Project Structure
 .
-├── Dockerfile
-├── package.json
-├── server.js
-└── README.md
+── Dockerfile
+── package.json
+── server.js
+── README.md
