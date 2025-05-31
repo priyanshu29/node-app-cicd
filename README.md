@@ -28,7 +28,7 @@ Integrated into a CI/CD pipeline
 ▶️ How to Run Locally
 
 # Clone the repo
-git clone https://github.com/<your-username>/<your-repo-name>.git
+git clone https://github.com/priyanshu29/node-app-cicd.git
 cd <your-repo-name>
 
 # Install dependencies
@@ -48,8 +48,8 @@ docker run -p 3000:3000 node-app
 
 
 📂 Project Structure
-.
-── Dockerfile
-── package.json
-── server.js
-── README.md
+
+- Dockerfile
+- package.json
+- server.js
+- README.md
