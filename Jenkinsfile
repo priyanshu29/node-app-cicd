@@ -18,7 +18,7 @@ pipeline {
       steps {
         withSonarQubeEnv('SonarQube') {
           withEnv(["PATH+SONAR=${tool 'SonarQube'}/bin"]) {
-          sh 'sonar-scanner'
+          sh 'sonar-scanner -X'
           }
         }
       }
@@ -43,14 +43,15 @@ pipeline {
 
     stage('Deploy into Kubernetes Cluster using ArgoCD') {
       steps {
+        withCredentials([usernamePassword(credentialsId: 'github-push-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
         sh '''
-          git clone https://github.com/priyanshu29/node-k8s-deploy.git
+          git clone https://$GIT_USER:GIT_TOKEN@github.com/priyanshu29/node-k8s-deploy.git
           cd node-k8s-deploy/deployment
           sed -i 's|priyanshu0998/node-app:.*|priyanshu0998/node-app:latest|' deployment.yaml
           git config user.email "priyanshut7@gmail.com"
-          git config user.name "priyanshu29"
+          git config user.name "$GIT_USER"
           git commit -am "Updated image tag to latest"
-          git push origin main
+          git push https://$GIT_USER:GIT_TOKEN@github.com/priyanshu29/node-k8s-deploy.git
         '''
       }
     }
