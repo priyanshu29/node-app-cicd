@@ -5,6 +5,7 @@ pipeline {
     DOCKER_HUB_USER = 'priyanshu0998'
     DOCKER_IMAGE = 'node-app'
     REGISTRY = 'docker.io'
+    IMAGE_TAG = "${env.BUILD_NUMBER}"
   }
 
   stages {
@@ -26,7 +27,7 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t $DOCKER_HUB_USER/$DOCKER_IMAGE:latest .'
+        sh 'docker build -t $DOCKER_HUB_USER/$DOCKER_IMAGE:$IMAGE_TAG .'
       }
     }
 
@@ -35,7 +36,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PWD', usernameVariable: 'DOCKER_USER')]) {
           sh '''
             echo "$DOCKER_PWD" | docker login -u "$DOCKER_USER" --password-stdin
-            docker push $DOCKER_HUB_USER/$DOCKER_IMAGE:latest
+            docker push $DOCKER_HUB_USER/$DOCKER_IMAGE:$IMAGE_TAG
           '''
         }
       }
@@ -47,10 +48,10 @@ pipeline {
         sh '''
           git clone https://$GIT_USER:GIT_TOKEN@github.com/priyanshu29/node-k8s-deploy.git
           cd node-k8s-deploy/deployment
-          sed -i 's|priyanshu0998/node-app:.*|priyanshu0998/node-app:latest|' deployment.yaml
+          sed -i 's|priyanshu0998/node-app:.*|priyanshu0998/node-app:$IMAGE_TAG|' deployment.yaml
           git config user.email "priyanshut7@gmail.com"
           git config user.name "$GIT_USER"
-          git commit -am "Updated image tag to latest"
+          git commit -am "Updated image tag to $IMAGE_TAG"
           git push https://$GIT_USER:GIT_TOKEN@github.com/priyanshu29/node-k8s-deploy.git
         '''
       }
