@@ -53,3 +53,5 @@ docker run -p 3000:3000 node-app
 - package.json
 - server.js
 - README.md
+- Jenkinsfile
+- sonar-project.properties
